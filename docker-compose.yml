@@ -43,7 +43,7 @@ services:
     image: docker.elastic.co/logstash/logstash:7.0.1
     container_name: ls01
     depends_on:
-      - es01,es02
+      - es01
     environment:
       - node.name=ls01
     volumes:
@@ -56,11 +56,13 @@ services:
   kb01:
     image: docker.elastic.co/kibana/kibana:7.0.1
     container_name: kb01
+    links: 
+      - es01
     depends_on:
-      - es01,es02
+      - es01
     environment:
       ELASTICSEARCH_PASSWORD: changeme
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
       ELASTICSEARCH_USERNAME: elastic
     volumes:
       - kbdata01:/usr/share/kibana/data
